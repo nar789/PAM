@@ -1,46 +1,58 @@
 #include<iostream>
 #include<string>
 #include<vector>
-#include<tchar.h>
-#include "lcs.h"
-#include "hList.h"
+#include "core.h"
 
 using namespace std;
 
-const wstring cmd[] = { L"PageNext",L"PagePrev" };
+void run(wstring& cmdstr)
+{
+	const int N = 2;
+	const wstring cmd[N] = { L"PageNext",L"PagePrev" };
+	vector<wstring> k[N];
+	k[0].push_back(CmdFilter(L"다음으로 넘겨주세요."));
+	k[0].push_back(CmdFilter(L"다음으로 넘겨줘"));
+	k[0].push_back(CmdFilter(L"뒤로 넘겨줘"));
+	k[1].push_back(CmdFilter(L"앞으로 넘겨주세요."));
 
-int wmain(int argc, wchar_t* argv[]) {
+	int idx = -1;
+	double m = 0;
+	for (int i = 0; i < N; i++)
+	{
+		double f = FindCmd(k[i], cmdstr);
+		if (f > m) {
+			m = f; idx = i;
+		}
+	}
 	
+	if(idx<0) cout << "Can't find command." << endl;
+	else wcout <<"result:"<< cmd[idx] << endl;
+}
+
+
+int init(wstring& cmdstr, int& argc, wchar_t* argv[])
+{
 	setlocale(LC_ALL, "korean");
 	wcout.imbue(locale("korean"));
-
 	if (argc > 1) {
-		wcout <<"cmd:"<< argv[1] << endl;
-	}
-	cout << endl;
-	vector<hList*> cmdtree;
-	hList next;
-	next + D(L"페이지", cmd[0]) + D(L"다음", cmd[0]) + D(L"다음으로", cmd[0]);
-	hList prev;
-	prev + D(L"페이지", cmd[1]) + D(L"뒤로", cmd[1]) + D(L"뒤로가기", cmd[1]) + D(L"앞으로", cmd[1]);
-	cmdtree.push_back(&next);
-	cmdtree.push_back(&prev);
-	hList* sel = NULL;
-	int hsum = 0xffffffff;
-	for (auto i : cmdtree) {
-		int sum = 0;
-		wcout << "[" << (*i)[0].cmd << " LCS]" << endl;
-		for (auto j : (*i)) {
-			sum += lcs(j.d.speech.c_str(), argv[1], wcslen(j.d.speech.c_str()), wcslen(argv[1]));
-			wcout << j.d.speech << " ";
-			cout << lcs(j.d.speech.c_str(), argv[1], wcslen(j.d.speech.c_str()), wcslen(argv[1])) << endl;
+		for (int i = 1; i < argc; i++) {
+			if (i != 1)cmdstr += L" ";
+			cmdstr += argv[i];
 		}
-		cout << "[lcs_sum:" << sum << "]" << endl << "--------" << endl;
-		if (hsum < sum) {
-			hsum = sum;
-			sel = i;
-		}
+		wcout << "cmd:" << cmdstr << endl;
 	}
-	wcout << "result:"<<(*sel)[0].cmd << endl;
+	else {
+		cout << "PAM v0.000823" << endl;
+		cout << "usage : pam [msg;korean message]" << endl;
+		return 0;
+	}
+	return 1;
+}
+
+int wmain(int argc, wchar_t* argv[]) {
+	wstring cmdstr = L"";
+	if (!init(cmdstr, argc, argv))return 0;
+	run(cmdstr);
 	return 0;
 }
+
