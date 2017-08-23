@@ -10,6 +10,17 @@ vector<wstring> dic = { L"야말로 ",L"야 ",L"조차 ",L"마저 ",L"까지 ",L
 		L"를 ",L"으로 ",L"로 ",L"줘",L"세요" };
 ```
 
+### 2. Usage
+```cpp
+_ usage : pam [msg;korean message]
+
+_ pam 다음 페이지로 넘겨주세요.
+result:PageNext
+
+_ pam 앞으로 넘겨줘
+result:PageNext
+```
+
 ### 2. Contact
 - <tony92511@hanmail.net><br>
 - <https://github.com/nar789/PAM><br>
