@@ -18,7 +18,7 @@ _ pam 다음 페이지로 넘겨주세요.
 result:PageNext
 
 _ pam 앞으로 넘겨줘
-result:PageNext
+result:PagePrev
 ```
 
 ### 2. Contact
